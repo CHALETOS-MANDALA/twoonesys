@@ -12,3 +12,5 @@ engine/.venv/
 **/.pytest_cache/
 **/.hypothesis/
 *.egg-info/
+
+*.log
