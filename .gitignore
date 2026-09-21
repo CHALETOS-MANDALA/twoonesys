@@ -1,0 +1,14 @@
+# TWOONESYS — repo radice dell'organo
+# Traccia: bridge/, documenti, engine/ (sorgente vendored Apache-2.0).
+# harness/ ha il PROPRIO repository git (storia cascade preservata): non si annida.
+harness/
+
+# engine: pesi e ambiente virtuale restano fuori
+engine/models/
+engine/.venv/
+
+# cache ovunque
+**/__pycache__/
+**/.pytest_cache/
+**/.hypothesis/
+*.egg-info/

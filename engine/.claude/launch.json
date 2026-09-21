@@ -1,0 +1,34 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "rizzo-q8",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "--no-sync", "rizzo", "serve", "--bits", "8"],
+      "port": 8017
+    },
+    {
+      "name": "rizzo-1.7b-q8",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": ["run", "--no-sync", "rizzo", "serve", "--size", "1.7b", "--bits", "8"],
+      "port": 8017
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "uv",
+      "runtimeArgs": [
+        "run",
+        "--no-sync",
+        "python",
+        "-m",
+        "http.server",
+        "8020",
+        "--directory",
+        "docs",
+        "--bind",
+        "127.0.0.1"
+      ],
+      "port": 8020
+    }
+  ]
+}
