@@ -2,7 +2,9 @@
 
 > A decision is not enough. TWOONESYS records why an action was allowed, proves what was decided, then records what actually happened.
 
-A System One **harness**, not a model.
+A System One **harness**, not a model. Two policies that touch the world:
+`fs.write.sandbox` and `exec.sandbox`. The second decides whether a process
+may start. It is not an operating-system jail after start.
 
 This repository is **only TWOONESYS**. SIX, LATENT_BRAIN+, PRISM, KIARNEL,
 ENI, SIX-IDE and MORPH are not here and are not published. If you

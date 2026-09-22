@@ -1,6 +1,8 @@
 """@guarded + cascade verify: agente bloccato, ricevuta verificabile."""
 
 import json
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -77,6 +79,48 @@ def test_verify_receipt_usa_registro_pubblico_di_default(tmp_path, monkeypatch):
     ok, msg = verify_receipt(caught.value.receipt)
     assert ok is True
     assert "authorized=False" in msg
+
+
+def test_exec_interprete_estraneo_non_parte(tmp_path, monkeypatch):
+    sandbox = tmp_path / "sandbox"
+    sandbox.mkdir()
+    monkeypatch.setenv("CASCADE_SANDBOX", str(sandbox))
+    script = sandbox / "ok.py"
+    script.write_text("print('no')\n", encoding="utf-8")
+    ran = {"n": 0}
+
+    @guarded(policy="exec.sandbox", receipt_dir=tmp_path / "receipts")
+    def lancia(argv, cwd):
+        ran["n"] += 1
+        return subprocess.run(argv, cwd=cwd, shell=False, check=True)
+
+    with pytest.raises(ActionDenied) as caught:
+        lancia(["python", str(script)], cwd=str(sandbox))
+    assert ran["n"] == 0
+    assert caught.value.receipt.tool == "exec"
+    assert caught.value.receipt.authorized is False
+
+
+def test_exec_script_nel_sandbox_parte(tmp_path, monkeypatch):
+    sandbox = tmp_path / "sandbox"
+    sandbox.mkdir()
+    monkeypatch.setenv("CASCADE_SANDBOX", str(sandbox))
+    script = sandbox / "ok.py"
+    marker = sandbox / "ran.txt"
+    script.write_text(
+        "from pathlib import Path\nPath('ran.txt').write_text('ok', encoding='utf-8')\n",
+        encoding="utf-8",
+    )
+
+    @guarded(policy="exec.sandbox", receipt_dir=tmp_path / "receipts")
+    def lancia(argv, cwd):
+        return subprocess.run(argv, cwd=cwd, shell=False, check=True)
+
+    rec = lancia([sys.executable, str(script)], cwd=str(sandbox))
+    assert marker.read_text(encoding="utf-8") == "ok"
+    assert rec.authorized is True
+    assert rec.outcome is True
+    assert rec.policy == "exec.sandbox"
 
 
 def test_chiave_sconosciuta_non_e_verificabile():

@@ -1,0 +1,26 @@
+name: inspect
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  public:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: install
+        run: python -m pip install -e "./harness[dev]" numpy
+      - name: shipped receipt
+        working-directory: harness
+        run: python -m cascade verify examples/fixtures/blocked_receipt.json --registry examples/fixtures/public_keys.json
+      - name: CASCADE tests
+        working-directory: harness
+        run: python -m pytest tests -q --tb=line
+      - name: PCT tests
+        working-directory: pct
+        run: python -m pytest tests -q --tb=line

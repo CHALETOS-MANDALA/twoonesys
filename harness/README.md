@@ -38,8 +38,10 @@ def scrivi_report(path, contenuto):
 # esegue e restituisce la ricevuta, oppure solleva ActionDenied
 ```
 
-Una sola policy in v1: `fs.write.sandbox`. Path fuori dal sandbox
-(`CASCADE_SANDBOX`) = blocco + ricevuta.
+Due policy:
+
+- `fs.write.sandbox` — path fuori da `CASCADE_SANDBOX` = blocco + ricevuta.
+- `exec.sandbox` — parte solo `[sys.executable, script.py]` se lo script è già nel sandbox. Niente shell, niente `-c`, niente un altro binario. Il processo, una volta partito, non è una gabbia del sistema operativo: la policy decide se può partire.
 
 ## Verifica di una ricevuta
 

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.3.0 — 2026-09-22
+
+Second world-touching policy. Still a harness, still inspectable.
+
+- `exec.sandbox`: a process starts only as `[this interpreter, one .py already inside the sandbox]`. No shell, no `-c`, no other binary.
+- The policy decides whether the process may start. It is not an OS jail after start.
+- `fs.write.sandbox` unchanged.
+
 ## 0.2.1 — 2026-09-22
 
 Clean-clone holes a reviewer found by running, not reading.
