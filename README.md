@@ -1,9 +1,7 @@
 # TWOONESYS
 
-JEV gives you a number. This is the next step: **may that number touch
-the world?** Authorize or block, leave a signed receipt, record what
-actually happened. Not a rival. A method to improve the part after
-the decision.
+A decision is not enough. TWOONESYS records why an action was allowed,
+proves what was decided, then records what actually happened.
 
 A System One **harness**, not a model.
 
