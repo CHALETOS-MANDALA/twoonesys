@@ -75,8 +75,8 @@ Non si dice «calibrato».
 ## Conformita'
 
 ```text
-python -m pytest cascade/tests -q
-python -m pytest cascade/tests/test_soh_conformance.py -q
+python -m pytest tests -q
+python -m pytest tests/test_soh_conformance.py -q
 ```
 
 Licenza: Apache-2.0. Modello di minaccia: `THREAT_MODEL.md`.

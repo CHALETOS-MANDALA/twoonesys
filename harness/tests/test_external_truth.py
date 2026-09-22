@@ -2,6 +2,8 @@
 
 import pytest
 
+pytest.importorskip("torch")
+
 from cascade.benchmarks_external import PendulumTruth, external_truth_benchmark
 
 

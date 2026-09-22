@@ -7,5 +7,5 @@ blocca, osserva l'esito, conserva la ricevuta firmata.
 from .guarded import ActionDenied, guarded
 from .receipt import ActionReceipt, verify_receipt
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __all__ = ["ActionDenied", "ActionReceipt", "guarded", "verify_receipt"]

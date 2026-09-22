@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cascade-soh"
-version = "0.2.0"
+version = "0.2.1"
 description = "System One Harness: autorizza azioni su evidenza e lascia una ricevuta firmata."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -27,7 +27,7 @@ dev = [
   "pydantic",
 ]
 measure = ["numpy"]
-a2a = ["fastapi", "pydantic"]
+a2a = ["fastapi", "pydantic", "uvicorn"]
 ml = ["torch"]
 
 [project.scripts]

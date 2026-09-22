@@ -1,18 +1,18 @@
 {
   "authorized": false,
   "contract_digest": "cascade-fs-write-sandbox-v1",
-  "created_at": 1790100526.3872144,
+  "created_at": 1790101266.0785143,
   "deny_reason": "path fuori dal sandbox o assente",
   "evidence_ref": "",
-  "key_id": "4e35f76122355461",
+  "key_id": "9132f1dc7c43c6d0",
   "outcome": false,
-  "path": "C:\\Users\\andre\\Desktop\\_MADRE_RUBINHO\\01_PROGETTI\\TWOONESYS\\harness\\examples\\non_doveva_esistere.txt",
+  "path": "examples/outside-sandbox.txt",
   "policy": "fs.write.sandbox",
   "principal": "cascade",
-  "request_id": "87713b01701e4271b11ad48a3fd199bb",
+  "request_id": "fixture-blocked-001",
   "schema": "cascade.receipt.v1",
   "scope": "sandbox",
-  "signature": "d9f9876bfa53faaed66613e92147398350b63cd2c53857c95645717d3eb7eb041e9fcf3fe2e50f4b57b78173d0ae9c0a06de84b5876e480bb60fe7a600322a03",
+  "signature": "4d8e5917d14e0adaa15ae7ad89586c82591d6f8eafce71ce5fddf163ef0f512fc6ed2d5220c80279792166b874091af92ec2ad3f5a5b457dc4eb846cf914a90c",
   "solver_status": "denied",
   "tool": "fs.write"
 }

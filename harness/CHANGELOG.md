@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## 0.2.1 — 2026-09-22
+
+Clean-clone holes a reviewer found by running, not reading.
+
+- Declare `cryptography`; extras `[dev]`, `[a2a]`, `[ml]`. `uvicorn` in `[a2a]`.
+- FastAPI is optional at import time.
+- `verify_receipt(rec)` uses the default public-key registry.
+- Shipped fixture receipt (portable path, no private key).
+- Torch tests `importorskip`; pytest path is `tests/`, not `cascade/tests`.
+- PCT README: 100 tests.
+
 ## 0.2.0 — 2026-09-20
 
 Prodotto minimo vendibile, sul disco.
