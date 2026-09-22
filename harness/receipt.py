@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .contracts import canonical_json
+from . import signing
 from .signing import KeyRegistry, SigningIdentity
 
 RECEIPT_SCHEMA = "cascade.receipt.v1"
@@ -141,10 +142,10 @@ def verify_receipt(
         return False, f"schema non supportato: {rec.schema!r}"
     if not rec.signature or not rec.key_id:
         return False, "ricevuta senza firma o key_id"
-    keys = registry or KeyRegistry()
+    keys = registry if registry is not None else KeyRegistry(signing.DEFAULT_PUBLIC_KEYS)
     if not rec.key_id:
         return False, "key_id assente"
-    if keys.public_for(rec.key_id) is None and registry is None:
+    if keys.public_for(rec.key_id) is None:
         return False, "chiave sconosciuta: non verificabile"
     if not keys.verify(rec.key_id, rec.payload(), bytes.fromhex(rec.signature)):
         return False, "firma non valida o chiave sconosciuta"

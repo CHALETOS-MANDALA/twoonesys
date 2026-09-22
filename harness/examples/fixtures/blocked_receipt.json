@@ -1,0 +1,18 @@
+{
+  "authorized": false,
+  "contract_digest": "cascade-fs-write-sandbox-v1",
+  "created_at": 1790100526.3872144,
+  "deny_reason": "path fuori dal sandbox o assente",
+  "evidence_ref": "",
+  "key_id": "4e35f76122355461",
+  "outcome": false,
+  "path": "C:\\Users\\andre\\Desktop\\_MADRE_RUBINHO\\01_PROGETTI\\TWOONESYS\\harness\\examples\\non_doveva_esistere.txt",
+  "policy": "fs.write.sandbox",
+  "principal": "cascade",
+  "request_id": "87713b01701e4271b11ad48a3fd199bb",
+  "schema": "cascade.receipt.v1",
+  "scope": "sandbox",
+  "signature": "d9f9876bfa53faaed66613e92147398350b63cd2c53857c95645717d3eb7eb041e9fcf3fe2e50f4b57b78173d0ae9c0a06de84b5876e480bb60fe7a600322a03",
+  "solver_status": "denied",
+  "tool": "fs.write"
+}

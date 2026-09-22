@@ -30,6 +30,7 @@ def test_eni_to_pipeline_end_to_end():
     """ENI (simulato) propone -> pipeline valida con causale + guard Z3."""
     import asyncio
 
+    pytest.importorskip("torch")
     from cascade.a2a_protocol import generate_keypair
     from cascade.neurosymbolic_guard import ConfidenceLevel
     from cascade.pipeline import CascadePipeline, PipelineConfig

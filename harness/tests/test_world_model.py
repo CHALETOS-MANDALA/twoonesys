@@ -1,7 +1,8 @@
 """Test del World Model JEPA (Layer 3)."""
 
-import torch
 import pytest
+
+torch = pytest.importorskip("torch")
 
 from cascade.world_model import (
     JEPAWorldModel,

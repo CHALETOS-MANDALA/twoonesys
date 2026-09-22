@@ -2,7 +2,7 @@
 
 La ricevuta dimostra il rifiuto. Verifica:
 
-    python -m cascade verify examples/blocked_receipt.json
+    python -m cascade verify examples/receipts/blocked_receipt.json
 """
 
 from __future__ import annotations

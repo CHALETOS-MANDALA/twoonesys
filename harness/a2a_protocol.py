@@ -401,13 +401,18 @@ def negotiate(registry: AgentRegistry, request: TaskRequest,
 
 
 # --------------------------------------------------------------------------- #
-# FastAPI service
+# FastAPI service (optional extra: pip install cascade-soh[a2a])
 # --------------------------------------------------------------------------- #
 
 import os
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel as PBaseModel
+try:
+    from fastapi import FastAPI, HTTPException
+    from pydantic import BaseModel as PBaseModel
+except ImportError:  # pragma: no cover
+    FastAPI = None  # type: ignore[misc, assignment]
+    HTTPException = None  # type: ignore[misc, assignment]
+    PBaseModel = object  # type: ignore[misc, assignment]
 
 
 # --- Schemi Pydantic ---
@@ -442,6 +447,8 @@ class ReportResp(PBaseModel):
 
 
 def create_app() -> FastAPI:
+    if FastAPI is None:
+        raise ImportError("pip install 'cascade-soh[a2a]' to serve the A2A API")
     app = FastAPI(title="CASCADE A2A")
     reg = AgentRegistry()
     replay_guard = ReplayGuard()

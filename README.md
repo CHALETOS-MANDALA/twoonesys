@@ -60,8 +60,17 @@ python -m pytest tests -q
 ```
 
 An agent tries to write outside the sandbox. CASCADE denies. The receipt is the proof.
+The receipt is **written by the example**, not shipped (live receipts stay gitignored).
+Verify uses the public keys in `harness/run/public_keys.json` from that same run.
+A committed copy lives at `harness/examples/fixtures/` so a clone can verify without executing:
 
-With the engine up (`bridge/AVVIA_ENGINE.bat` then `bridge/AVVIA_GATE.bat`):
+```text
+python -m cascade verify examples/fixtures/blocked_receipt.json --registry examples/fixtures/public_keys.json
+```
+
+`pytest` without torch: those tests skip. Full suite: `pip install -e ".[dev,ml]"`.
+
+With the engine up (`bridge/AVVIA_ENGINE.bat` then `bridge/AVVIA_GATE.bat` — 4B weights are **not** in this repo):
 
 ```text
 python bridge/e2e_chiudi.py
@@ -77,4 +86,4 @@ python bridge/e2e_chiudi.py
 
 ## License
 
-Apache-2.0. See `LICENSE` and `NOTICE`.
+Apache-2.0 (`LICENSE`). `NOTICE` is attribution (Simone Rizzo, Diogo Almeida), not a second license.

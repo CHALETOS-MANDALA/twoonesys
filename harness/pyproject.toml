@@ -12,11 +12,23 @@ requires-python = ">=3.11"
 authors = [{ name = "Rubinho" }]
 dependencies = [
   "httpx",
+  "cryptography",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "hypothesis"]
+dev = [
+  "pytest",
+  "hypothesis",
+  "numpy",
+  "z3-solver",
+  "networkx",
+  "scipy",
+  "fastapi",
+  "pydantic",
+]
 measure = ["numpy"]
+a2a = ["fastapi", "pydantic"]
+ml = ["torch"]
 
 [project.scripts]
 cascade = "cascade.cli:main"

@@ -21,7 +21,6 @@ from .signing import KeyRegistry, SigningIdentity
 
 POLICY_FS_WRITE = "fs.write.sandbox"
 DEFAULT_SANDBOX_ENV = "CASCADE_SANDBOX"
-DEFAULT_PUBLIC_KEYS = Path(__file__).resolve().parent / "run" / "public_keys.json"
 
 
 class ActionDenied(RuntimeError):
@@ -49,6 +48,7 @@ def path_in_sandbox(path: str | Path, root: Path | None = None) -> bool:
 
 
 def default_key_registry() -> KeyRegistry:
+    from .signing import DEFAULT_PUBLIC_KEYS
     return KeyRegistry(DEFAULT_PUBLIC_KEYS)
 
 

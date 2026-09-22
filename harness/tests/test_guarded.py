@@ -61,6 +61,24 @@ def test_scrittura_in_sandbox_esegue_e_ricevuta_verificabile(tmp_path, monkeypat
     assert cascade_main(["verify", str(saved), "--registry", str(disk_keys)]) == 0
 
 
+def test_verify_receipt_usa_registro_pubblico_di_default(tmp_path, monkeypatch):
+    sandbox = tmp_path / "sandbox"
+    sandbox.mkdir()
+    monkeypatch.setenv("CASCADE_SANDBOX", str(sandbox))
+    pub = tmp_path / "public_keys.json"
+    monkeypatch.setattr("cascade.signing.DEFAULT_PUBLIC_KEYS", pub)
+
+    @guarded(receipt_dir=tmp_path / "receipts")
+    def scrivi(path, contenuto):
+        Path(path).write_text(contenuto, encoding="utf-8")
+
+    with pytest.raises(ActionDenied) as caught:
+        scrivi(tmp_path / "outside.txt", "no")
+    ok, msg = verify_receipt(caught.value.receipt)
+    assert ok is True
+    assert "authorized=False" in msg
+
+
 def test_chiave_sconosciuta_non_e_verificabile():
     ident = SigningIdentity.generate()
     other = KeyRegistry()

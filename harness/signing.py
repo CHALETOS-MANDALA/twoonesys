@@ -28,6 +28,7 @@ from .a2a_protocol import generate_keypair, sign_bytes, verify_bytes
 
 DEFAULT_STORE_ENV = "CASCADE_KEY_STORE"
 DEFAULT_STORE = Path(__file__).resolve().parent / "run" / "signing_key.json"
+DEFAULT_PUBLIC_KEYS = Path(__file__).resolve().parent / "run" / "public_keys.json"
 
 
 def _key_id(public_bytes: bytes) -> str:

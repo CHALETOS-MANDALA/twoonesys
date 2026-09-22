@@ -20,6 +20,12 @@ python examples/blocked_agent.py
 python -m cascade verify examples/receipts/blocked_receipt.json
 ```
 
+The receipt is written by the example. On a fresh clone, verify the fixture:
+
+```text
+python -m cascade verify examples/fixtures/blocked_receipt.json --registry examples/fixtures/public_keys.json
+```
+
 ## Uso
 
 ```python
@@ -49,6 +55,8 @@ Usa solo le chiavi pubbliche. Chiave sconosciuta = non verificabile.
 python examples/blocked_agent.py
 python -m cascade verify examples/receipts/blocked_receipt.json
 ```
+
+Or the shipped fixture: `examples/fixtures/blocked_receipt.json`.
 
 ## Cosa e' vero oggi
 

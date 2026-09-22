@@ -11,7 +11,7 @@ Unica dipendenza: numpy.
 ## Come si gira
 
 ```
-python3 -m pytest -q          # 93 test
+python3 -m pytest -q          # 100 test
 python3 mutations.py          # cancello di mutazione: deve essere 7/7
 python3 report.py --episodes 200000 --seed 20260918
 python3 scaling.py            # la predizione falsificabile sulla scala

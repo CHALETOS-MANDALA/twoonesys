@@ -1,7 +1,8 @@
 from pathlib import Path
 
 import pytest
-import torch
+
+torch = pytest.importorskip("torch")
 
 from cascade.expert_runtime import ExpertRuntime, ExpertRuntimeError, ExpertSpec
 

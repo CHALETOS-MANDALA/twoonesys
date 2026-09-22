@@ -2,6 +2,8 @@
 
 import pytest
 
+pytest.importorskip("torch")
+
 from cascade.benchmarks import (
     a2a_http_benchmark,
     causal_benchmark,

@@ -1,8 +1,9 @@
 """Test della Memoria Continua (Layer 2)."""
 
-import torch
-import torch.nn as nn
 import pytest
+
+torch = pytest.importorskip("torch")
+import torch.nn as nn  # noqa: E402
 
 from cascade.continuous_memory import (
     EWC,

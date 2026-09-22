@@ -1,7 +1,8 @@
 """Integration test end-to-end del pipeline CASCADE (tutti i layer)."""
 
-import torch
 import pytest
+
+torch = pytest.importorskip("torch")
 
 from cascade.a2a_protocol import AgentManifest, generate_keypair
 from cascade.contracts import AgentSignal, Task
