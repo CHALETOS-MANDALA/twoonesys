@@ -4,8 +4,8 @@
 
 A System One **harness**, not a model.
 
-This repository is **only TWOONESYS**. SIX, LATENT_BRAIN+, PRISM, the math
-kernel, ENI, SIX-IDE and MORPH are not here and are not published. If you
+This repository is **only TWOONESYS**. SIX, LATENT_BRAIN+, PRISM, KIARNEL,
+ENI, SIX-IDE and MORPH are not here and are not published. If you
 want those, ask Rubinho Brazil directly.
 
 ## Why it exists
@@ -47,7 +47,7 @@ state
 
 ## What is not in this repository
 
-PRISM, the math kernel, LATENT_BRAIN+, ENI, SIX-IDE, MORPH. CASCADE can call them through env paths. They are other organs. See [`docs/ORGANI_COLLEGATI.md`](docs/ORGANI_COLLEGATI.md).
+PRISM, KIARNEL, LATENT_BRAIN+, ENI, SIX-IDE, MORPH. CASCADE can call them through env paths. They are other organs. See [`docs/ORGANI_COLLEGATI.md`](docs/ORGANI_COLLEGATI.md).
 
 ## Quick check (no SIX, no cloud)
 

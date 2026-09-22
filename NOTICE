@@ -27,7 +27,7 @@ Third-party, not claimed as Rubinho's:
 Optional organs used by CASCADE adapters, also not in this repository:
 
   PRISM          — document relevance (CASCADE_PRISM_PATH)
-  math kernel    — numeric oracle (CASCADE_MATEMATICA_KERNEL)
+  KIARNEL        — numeric oracle (CASCADE_MATEMATICA_KERNEL)
   LATENT_BRAIN+  — SIX memory/decode (optional latent_bridge)
   ENI            — optional proposer (eni_brain)
 
