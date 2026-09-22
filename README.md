@@ -1,7 +1,6 @@
 # TWOONESYS
 
-A decision is not enough. TWOONESYS records why an action was allowed,
-proves what was decided, then records what actually happened.
+> A decision is not enough. TWOONESYS records why an action was allowed, proves what was decided, then records what actually happened.
 
 A System One **harness**, not a model.
 
