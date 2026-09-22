@@ -1,5 +1,10 @@
 # TWOONESYS
 
+JEV gives you a number. This is the next step: **may that number touch
+the world?** Authorize or block, leave a signed receipt, record what
+actually happened. Not a rival. A method to improve the part after
+the decision.
+
 A System One **harness**, not a model.
 
 This repository is **only TWOONESYS**. SIX, LATENT_BRAIN+, PRISM, the math
