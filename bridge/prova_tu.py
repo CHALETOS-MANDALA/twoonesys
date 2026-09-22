@@ -1,12 +1,7 @@
 """TWOONESYS — prova tu stesso (mondo reale).
 
-Incolla un ticket / testo vero. Decidi se il ledger di sistema ha evidenza.
-Vedi: decisione engine, detector testuale vs strutturale, M4, policy, mondo.
-
-    dalla radice TWOONESYS:
-        python bridge/prova_tu.py
-    oppure:
-        bridge\\AVVIA_PROVA.bat
+    bridge\\AVVIA_PROVA.bat
+    oppure:  python bridge/prova_tu.py
 """
 
 from __future__ import annotations
@@ -46,6 +41,17 @@ QUESTIONS = {
         "policy": {"allow_abstain": False},
     },
 }
+
+DEMO_TICKET = (
+    "Ticket T-1001 — Rimborso doppio addebito\n\n"
+    "Cliente: Maria Rossi\n"
+    "Ordine: #88421\n\n"
+    "Buongiorno, ieri mi sono stati addebitati due volte 49,90€ "
+    "per lo stesso ordine.\n"
+    "Ho allegato screenshot dell'estratto conto e della conferma d'ordine.\n"
+    "Chiedo rimborso immediato del doppio addebito.\n"
+    "Grazie."
+)
 
 
 def calibrate(raw: float, score: float) -> float:
@@ -87,31 +93,19 @@ def verify_receipt(path: Path) -> str:
     return line[0] if line else "(nessun output)"
 
 
-def read_multiline(prompt: str) -> str:
-    print(prompt)
-    print("  (scrivi il testo; riga vuota per terminare)\n")
-    lines = []
-    while True:
-        try:
-            line = input()
-        except EOFError:
-            break
-        if line == "" and lines:
-            break
-        if line == "" and not lines:
-            continue
-        lines.append(line)
-    return "\n".join(lines).strip()
-
-
 def ask_yes_no(q: str, default: bool = False) -> bool:
     hint = "S/n" if default else "s/N"
     while True:
-        a = input(f"{q} [{hint}]: ").strip().lower()
-        if a == "" and default:
-            return True
-        if a == "" and not default:
-            return False
+        try:
+            a = input(f"{q} [{hint}]: ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            return default
+        if len(a) > 8:
+            print("  rispondi solo s oppure n")
+            continue
+        if a == "" :
+            return default
         if a in ("s", "si", "y", "yes"):
             return True
         if a in ("n", "no"):
@@ -119,19 +113,28 @@ def ask_yes_no(q: str, default: bool = False) -> bool:
         print("  rispondi s oppure n")
 
 
-def run_once(proposer: RizzoProposer) -> None:
-    text = read_multiline("Incolla il ticket / messaggio reale:")
-    if not text:
-        print("  (vuoto — annullo)")
-        return
-    evidenza = ask_yes_no(
-        "Il LEDGER DI SISTEMA ha evidenza verificata per questo caso?\n"
-        "  (s = fatto strutturale presente; n = ledger vuoto,\n"
-        "   anche se il testo parla di screenshot/prove)",
-        default=False)
+def read_ticket() -> str:
+    print("Ticket:")
+    print("  INVIO = usa DEMO  |  altrimenti incolla e chiudi con END\n")
+    lines: list[str] = []
+    while True:
+        try:
+            line = input()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            break
+        if not lines and line.strip() == "":
+            return DEMO_TICKET
+        if line.strip().upper() == "END":
+            break
+        lines.append(line)
+    return "\n".join(lines).strip()
 
-    ref = f"prova-{int(datetime.now().timestamp())}"
-    print("\n--- engine decide ---")
+
+def evaluate(proposer: RizzoProposer, text: str, evidenza: bool, label: str) -> dict:
+    ref = f"prova-{int(datetime.now().timestamp())}-{label}"
+    print(f"\n=== {label} ===")
+    print(f"ledger evidenza: {'SI' if evidenza else 'NO (vuoto)'}")
     prop = proposer.propose({"ticket": text, "ref": ref}, QUESTIONS,
                             question="reparto")
     facts = facts_for(evidenza, ref)
@@ -145,8 +148,25 @@ def run_once(proposer: RizzoProposer) -> None:
     print(f"  testuale  s={s_t:+.2f}  → M4 {c_t:.4f}")
     print(f"  struttur. s={s_s:+.2f}  → M4 {c_s:.4f}")
     if abs(c_t - c_s) > 0.05:
-        print("  >>> DIVERGENZA: il testo e la struttura non concordano")
+        print("  >>> DIVERGENZA: testo e struttura non concordano")
+    else:
+        print("  (testuale e strutturale allineati)")
 
+    return {
+        "request_id": ref,
+        "reparto": prop.value,
+        "raw_confidence": prop.confidence,
+        "conf_testuale_m4": c_t,
+        "conf_strutturale_m4": c_s,
+        "ledger_evidenza": evidenza,
+        "ticket": text[:500],
+        "s_testuale": s_t,
+        "s_strutturale": s_s,
+        "touched": datetime.now(timezone.utc).isoformat(),
+    }
+
+
+def write_sandbox(payload: dict) -> tuple:
     SANDBOX.mkdir(parents=True, exist_ok=True)
     RECEIPTS.mkdir(parents=True, exist_ok=True)
     os.environ["CASCADE_SANDBOX"] = str(SANDBOX)
@@ -155,48 +175,86 @@ def run_once(proposer: RizzoProposer) -> None:
     def scrivi(path, contenuto):
         Path(path).write_text(contenuto, encoding="utf-8")
 
-    request_id = ref
-    payload = {
-        "request_id": request_id,
-        "reparto": prop.value,
-        "raw_confidence": prop.confidence,
-        "conf_testuale_m4": c_t,
-        "conf_strutturale_m4": c_s,
-        "ledger_evidenza": evidenza,
-        "ticket": text[:500],
-        "touched": datetime.now(timezone.utc).isoformat(),
-    }
-    target = SANDBOX / f"{request_id}.json"
-
-    print("\n--- policy: scrittura IN sandbox ---")
+    target = SANDBOX / f"{payload['request_id']}.json"
+    print("\n--- scrittura IN sandbox ---")
     rec = scrivi(target, json.dumps(payload, indent=1, ensure_ascii=False))
     mondo = target.is_file() and json.loads(
-        target.read_text(encoding="utf-8")).get("request_id") == request_id
+        target.read_text(encoding="utf-8")).get("request_id") == payload["request_id"]
     print(f"  authorized={rec.authorized}  mondo_osserva={mondo}")
-    print(f"  file: {target}")
     print(f"  ricevuta: {verify_receipt(RECEIPTS / f'{rec.request_id}.json')}")
 
-    if ask_yes_no("Provare la STESSA scrittura FUORI sandbox? (deve fallire)",
-                  default=True):
-        print("\n--- policy: scrittura FUORI sandbox ---")
-        with tempfile.TemporaryDirectory() as tmp:
-            try:
-                scrivi(Path(tmp) / "no.json", json.dumps(payload))
-                print("  ERRORE: non e' stata bloccata")
-            except ActionDenied as d:
-                print(f"  BLOCCATA  authorized={d.receipt.authorized}")
-                out = RECEIPTS / f"blocked_{d.receipt.request_id}.json"
-                d.receipt.save(out)
-                print(f"  ricevuta deny: {verify_receipt(out)}")
+    print("\n--- scrittura FUORI sandbox (deve fallire) ---")
+    with tempfile.TemporaryDirectory() as tmp:
+        try:
+            scrivi(Path(tmp) / "no.json", json.dumps(payload))
+            print("  ERRORE: non e' stata bloccata")
+            denied = False
+        except ActionDenied as d:
+            print(f"  BLOCCATA  authorized={d.receipt.authorized}")
+            out = RECEIPTS / f"blocked_{d.receipt.request_id}.json"
+            d.receipt.save(out)
+            print(f"  ricevuta deny: {verify_receipt(out)}")
+            denied = True
 
+    return rec, mondo, denied
+
+
+def log_row(payload: dict, extra: dict) -> None:
     LOG.parent.mkdir(parents=True, exist_ok=True)
     with LOG.open("a", encoding="utf-8") as fh:
-        fh.write(json.dumps(payload | {
-            "authorized": rec.authorized, "outcome": mondo,
-            "s_testuale": s_t, "s_strutturale": s_s,
-            "contract_digest": "twoonesys-prova-tu-v1",
+        fh.write(json.dumps(payload | extra | {
+            "contract_digest": "twoonesys-prova-tu-v2",
         }, ensure_ascii=False) + "\n")
-    print(f"\n  sessione loggata in {LOG}")
+
+
+def run_demo(proposer: RizzoProposer) -> None:
+    text = DEMO_TICKET
+    print("\n--- ticket DEMO ---")
+    for ln in text.splitlines():
+        print(f"  {ln}")
+    print("------------------")
+    print(
+        "\nStesso ticket DUE volte:\n"
+        "  1) ledger VUOTO  → aspettati DIVERGENZA\n"
+        "  2) ledger PIENO  → aspettati allineamento"
+    )
+
+    p1 = evaluate(proposer, text, evidenza=False, label="A ledger VUOTO")
+    p2 = evaluate(proposer, text, evidenza=True, label="B ledger PIENO")
+    rec, mondo, denied = write_sandbox(p1)
+
+    log_row(p1, {"authorized": rec.authorized, "outcome": mondo,
+                 "outside_denied": denied, "pass": "A"})
+    log_row(p2, {"authorized": rec.authorized, "outcome": mondo,
+                 "outside_denied": denied, "pass": "B"})
+
+    print("\n========== RIEPILOGO ==========")
+    print(f"  A ledger vuoto:  testuale M4 {p1['conf_testuale_m4']:.3f}  "
+          f"strutt. M4 {p1['conf_strutturale_m4']:.3f}")
+    print(f"  B ledger pieno:  testuale M4 {p2['conf_testuale_m4']:.3f}  "
+          f"strutt. M4 {p2['conf_strutturale_m4']:.3f}")
+    print(f"  sandbox ok={mondo}   fuori bloccata={denied}")
+    print(f"  log: {LOG}")
+    print("===============================")
+
+
+def run_free(proposer: RizzoProposer) -> None:
+    text = read_ticket()
+    if not text:
+        print("  (vuoto — annullo)")
+        return
+    print("--- testo usato ---")
+    for ln in text.splitlines():
+        print(f"  {ln}")
+    print("-------------------")
+    evidenza = ask_yes_no(
+        "Ledger di sistema ha evidenza verificata? (solo s/n)",
+        default=False)
+    payload = evaluate(proposer, text, evidenza,
+                       label="libero-" + ("si" if evidenza else "no"))
+    rec, mondo, denied = write_sandbox(payload)
+    log_row(payload, {"authorized": rec.authorized, "outcome": mondo,
+                      "outside_denied": denied})
 
 
 def main() -> int:
@@ -210,18 +268,30 @@ def main() -> int:
     except RizzoBridgeError as exc:
         print(f"\nENGINE NON RAGGIUNGIBILE: {exc}")
         print("Avvia prima:  bridge\\AVVIA_ENGINE.bat")
-        print("oppure:       cd engine && uv run rizzo serve --size 4b --bits 8")
         return 1
     print(f"engine: {h.get('status')}\n")
-
-    while True:
-        run_once(proposer)
-        if not ask_yes_no("\nAltro ticket?", default=True):
-            break
-        print()
-    print("fine.")
+    print("Scegli:")
+    print("  1  = DEMO automatico (consigliato: INVIO)")
+    print("  2  = ticket libero")
+    try:
+        scelta = input("\n> ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print("\nannullato.")
+        return 0
+    if scelta in ("", "1"):
+        run_demo(proposer)
+    elif scelta == "2":
+        run_free(proposer)
+    else:
+        print("scelta non valida")
+        return 1
+    print("\nfine. Finestra chiudibile.")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    try:
+        raise SystemExit(main())
+    except KeyboardInterrupt:
+        print("\ninterrotto.")
+        raise SystemExit(130)

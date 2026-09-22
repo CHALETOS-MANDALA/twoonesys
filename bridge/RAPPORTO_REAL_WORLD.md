@@ -26,7 +26,7 @@ Ricevute: `bridge/receipts_real/`
 2. **Policy indipendente:** anche con raw_p=1.0 la scrittura fuori sandbox
    è rifiutata e la ricevuta di deny verifica.
 3. **Mondo osservato:** `outcome` letto dal file sul disco, non dal ritorno
-   dell’executor. Campi `outcome_contract` + fasi dichiarate (verso PRECEDENTE).
+   dell’executor. Campi `outcome_contract` + fasi dichiarate (verso PCT).
 
 Non è un run statistico (n=4). È la prova che la filiera gira sul reale:
 engine → detector strutturale → M4 → policy → disco → ricevuta.

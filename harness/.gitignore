@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+.pytest_cache/
+.hypothesis/
+.mypy_cache/
+run/
+cascade_sandbox/
+examples/sandbox/
+examples/receipts/
+*.tmp

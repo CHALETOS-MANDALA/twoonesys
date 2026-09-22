@@ -1,19 +1,49 @@
-# TWOONESYS — repo radice dell'organo
-# Traccia: bridge/, documenti, engine/ (sorgente vendored Apache-2.0).
-# harness/ ha il PROPRIO repository git (storia cascade preservata): non si annida.
-harness/
+# TWOONESYS — repo pubblica
+# CASCADE (harness/) SI traccia. Il gitdir nested NO.
 
-# engine: pesi e ambiente virtuale restano fuori
+harness/.git/
+harness/.git.cascade-local/
+
+# Pesi e ambienti
 engine/models/
 engine/.venv/
+**/.venv/
+**/.env
+**/.env.*
 
-# cache ovunque
+# Cache
 **/__pycache__/
 **/.pytest_cache/
 **/.hypothesis/
+**/.mypy_cache/
 *.egg-info/
+.ruff_cache/
 
 *.log
 
+# Prove vive, ricevute, sandbox (non sono il prodotto)
 bridge/sandbox/
+bridge/sandbox_*/
 bridge/receipts/
+bridge/receipts_*/
+bridge/run_*/
+bridge/run_e2e/
+bridge/run_gen/
+bridge/run_prova/
+bridge/run_real/
+bridge/run_six/
+harness/run/
+harness/examples/sandbox/
+harness/examples/receipts/
+harness/cascade_sandbox/
+
+# Chiavi
+**/*signing_key*
+**/secrets/
+
+# Cablaggio SIX: non pubblicato
+CABLAGGIO_SIX.md
+
+# Editor
+.cursor/
+*.swp

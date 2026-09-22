@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cascade-soh"
+version = "0.2.0"
+description = "System One Harness: autorizza azioni su evidenza e lascia una ricevuta firmata."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "Rubinho" }]
+dependencies = [
+  "httpx",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "hypothesis"]
+measure = ["numpy"]
+
+[project.scripts]
+cascade = "cascade.cli:main"
+
+[tool.setuptools]
+packages = ["cascade"]
+
+[tool.setuptools.package-dir]
+cascade = "."
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+  "integration: tests that require configured external backends or services",
+]

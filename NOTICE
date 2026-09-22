@@ -1,0 +1,35 @@
+TWOONESYS
+Copyright 2026 Rubinho Brazil
+
+This product includes:
+
+  CASCADE (harness/) — System One harness: authorize or deny, signed receipt.
+  PCT (pct/) — episodic measurement after the world has answered.
+  bridge/ — HTTP gate (:8018) and episode contract.
+
+  These three are original work of Rubinho Brazil, Apache-2.0.
+
+---------------------------------------------------------------------------
+Third-party, not claimed as Rubinho's:
+
+  engine/ — Rizzo Flow
+  Copyright 2026 Simone Rizzo — Rizzo AI Academy
+  License: Apache-2.0 (see engine/LICENSE)
+  Local, 0-token typed decisions. Vendored here so the gate can talk to
+  a System One engine without a second clone. Not a TWOONESYS model.
+  Rizzo Flow is not affiliated with TypeSafe.
+
+  JEV — creation of Diogo Almeida / TypeSafe.
+  Not included in this repository. TWOONESYS is not a competitor and not a
+  rebrand. It is a method to improve the step after a System One decision
+  (authorize, signed receipt, episode after the world).
+
+Optional organs used by CASCADE adapters, also not in this repository:
+
+  PRISM          — document relevance (CASCADE_PRISM_PATH)
+  math kernel    — numeric oracle (CASCADE_MATEMATICA_KERNEL)
+  LATENT_BRAIN+  — SIX memory/decode (optional latent_bridge)
+  ENI            — optional proposer (eni_brain)
+
+Without those paths, CASCADE still blocks, signs, and records.
+---------------------------------------------------------------------------
