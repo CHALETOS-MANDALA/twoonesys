@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## 0.3.1 — 2026-09-24
+
+A decision that already happened can be handed to the harness.
+
+- `occhio_ponte.consegna` writes the typed verdict (`choice`, `noul`, or `score`).
+- Probability and confidence are dropped. They do not allow or deny.
+- A sentence in the verdict is refused before the policy runs.
+- The model is not in this package.
+
 ## 0.3.0 — 2026-09-22
 
 Second world-touching policy. Still a harness, still inspectable.
